@@ -1,0 +1,6 @@
+eel
+pyttsx3
+SpeechRecognition
+pywhatkit
+pyaudio
+playsound

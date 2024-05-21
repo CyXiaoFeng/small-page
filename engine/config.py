@@ -1,0 +1,1 @@
+ASSISTANT_NAME = "小页"
