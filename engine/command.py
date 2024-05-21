@@ -69,8 +69,12 @@ def allCommands():
         # from engine.features import PlayFirework
         # PlayFirework(video_dir)
         eel.PlayVideo(video_dir)
+    elif "weather" in query:
+        from engine.features import GetWeather
+        GetWeather(query)
     #未能识别的命令
     else:
         print("not correct command")
+        speak('not correct command')
 
     eel.ShowHood()
