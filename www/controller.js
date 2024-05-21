@@ -15,4 +15,10 @@ $(document).ready(function () {
         $("#Oval").attr("hidden", false);
         $("#SiriWave").attr("hidden", true);
     }
+
+    eel.expose(PlayVideo)
+    function PlayVideo(videoPath) {
+        window.location.replace("playvideo.html");
+
+    }
 });

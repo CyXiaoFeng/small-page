@@ -3,4 +3,5 @@ pyttsx3
 SpeechRecognition
 pywhatkit
 pyaudio
-playsound
+MoviePy
+Pygame

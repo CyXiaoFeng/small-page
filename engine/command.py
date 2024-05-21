@@ -14,15 +14,14 @@ def speak(text):
 
 
 def takecommand():
-    r = sr.Recognizer()
-    with sr.Microphone() as source:
-        print('listening...')
-        eel.DisplayMessage('listening...')
-        r.pause_threshold = 1
-        r.adjust_for_ambient_noise(source)
-        audio = r.listen(source, 10, 6)
-
     try:
+        r = sr.Recognizer()
+        with sr.Microphone() as source:
+            print('listening...')
+            eel.DisplayMessage('listening...')
+            r.pause_threshold = 1
+            r.adjust_for_ambient_noise(source)
+            audio = r.listen(source, 10, 6)
         print('recognizing')
         eel.DisplayMessage('recognizing...')
         # Recognize (convert from speech to text)
@@ -31,14 +30,18 @@ def takecommand():
             print(f"You said: {query}")
         else:
             print("Sorry, I could not understand the audio")
-            query = "on youtube"
+            query = "on error"
             eel.DisplayMessage(query)
         time.sleep(2)
 
+    except sr.WaitTimeoutError:
+        print("WaitTimeoutError")
     except sr.UnknownValueError:
         print("Sorry, I could not understand the audio")
+        query = "on error"
     except sr.RequestError as e:
         print(f"Could not request results; {e}")
+    
     
     # 语音识别如果包含的有on you
     # return "on youtube"
@@ -60,6 +63,12 @@ def allCommands():
          print("on youtube website")
          from engine.features import PlayYoutube
          PlayYoutube(query)
+    elif "video" in query:
+        print("play a firework video")
+        video_dir = "www\\assets\\video\\firework.mp4"
+        # from engine.features import PlayFirework
+        # PlayFirework(video_dir)
+        eel.PlayVideo(video_dir)
     #未能识别的命令
     else:
         print("not correct command")

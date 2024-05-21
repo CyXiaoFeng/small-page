@@ -3,7 +3,7 @@ import re
 import sqlite3
 import webbrowser
 
-
+from moviepy.editor import VideoFileClip
 from engine.command import speak
 from engine.config import ASSISTANT_NAME
 import pywhatkit as kit
@@ -51,6 +51,12 @@ def PlayYoutube(query="Never Gonna Give You Up"):
     search_term = extract_yt_term(query)
     speak(f"playing {search_term if search_term else query} on YouTube")
     kit.playonyt(search_term)
+
+def PlayFirework(video_file="Never Gonna Give You Up"):
+    clip = VideoFileClip(video_file)
+    clip.preview()
+    clip.close()
+    
 def extract_yt_term(command):
     #定义一个规则表达模式用来捕获歌曲名称
     pattern=r'play\s+(.*?)\s+on\s+youtube'
