@@ -1,7 +1,7 @@
 eel==0.16.0
 pyttsx3==2.90
 SpeechRecognition==3.10.4
-pywhatkit==5。4
+pywhatkit==5.4
 pyaudio==0.2.14
 MoviePy==1.0.3
 Pygame==2.5.2
