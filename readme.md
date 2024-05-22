@@ -1,8 +1,8 @@
 ## 创建并进入虚拟环境
-```python
+
 python -m venv venv
 .\venv\Scripts\activate
-```
+
 
 ## 安装依赖包
     pip install --no-cache-dir -r requirements.txt
