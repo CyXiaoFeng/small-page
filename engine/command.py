@@ -48,6 +48,8 @@ def takecommand():
     # return "open word"
     # return "open web"
     # return "open 有道词典"
+    # return "weather in beijing"
+    # return "play video"
     return query.lower()
 
 @eel.expose
