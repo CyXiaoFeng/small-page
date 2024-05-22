@@ -1,7 +1,7 @@
 ## 创建并进入虚拟环境
 
-python -m venv venv
-.\venv\Scripts\activate
+    python -m venv venv
+    .\venv\Scripts\activate
 
 
 ## 安装依赖包
