@@ -2,6 +2,10 @@ import pyttsx3
 import speech_recognition as sr # type: ignore
 import eel
 import time
+import whisper
+import numpy as np
+
+model = whisper.load_model("base")
 
 def speak(text):
     engine = pyttsx3.init("sapi5")
@@ -14,6 +18,40 @@ def speak(text):
 
 
 def takecommand():
+    try:
+        r = sr.Recognizer()
+        with sr.Microphone() as source:
+            print('listening...')
+            eel.DisplayMessage('listening...')
+            r.pause_threshold = 1
+            r.adjust_for_ambient_noise(source)
+            audio = r.listen(source, 10, 6)
+        print('recognizing')
+        eel.DisplayMessage('recognizing...')
+        # Recognize (convert from speech to text)
+        audio_data = audio.get_wav_data()
+        audio_array = np.frombuffer(audio_data, dtype=np.int16)
+        # 转换为浮点型并归一化
+        audio_array = audio_array.astype(np.float32) / 32768.0
+        result = model.transcribe(audio_array, language="en", fp16=False)
+        if result:
+            print(f"You said: {result['text']}")
+        else:
+            print("Sorry, I could not understand the audio")
+            result = "on error"
+            eel.DisplayMessage(result["text"])
+        time.sleep(2)
+
+    except sr.WaitTimeoutError:
+        print("WaitTimeoutError")
+    except sr.UnknownValueError:
+        print("Sorry, I could not understand the audio")
+        query = "on error"
+    except sr.RequestError as e:
+        print(f"Could not request results; {e}")
+    return "error"
+
+def takecommands():
     try:
         r = sr.Recognizer()
         with sr.Microphone() as source:
