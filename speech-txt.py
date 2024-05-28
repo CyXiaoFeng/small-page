@@ -63,14 +63,18 @@ def wav_fp32_from_raw_data(audio_array):
     return wav_data
 
 # 谷歌语音转换
-def google_transcation(source,primary_language='en-US',second_languages=[]):
+def google_transcation(source,second_languages=[]):
     audio = None
     try:
         print("谷歌")
         recognizer.adjust_for_ambient_noise(source)
         audio = recognizer.listen(source, 10, 6)
         print('recognizing')
-        query = recognizer.recognize_google(audio,language=primary_language)
+        # query = recognizer.recognize_google(audio,language=primary_language)
+        for language in second_languages:
+            print(language)
+            query = recognizer.recognize_google(audio, language=language)
+            print(f"{'on youtube' in query.lower() or '在youtube' in query.lower()}")
         if query:
             print(f"You said: {query}")
         else:
@@ -82,9 +86,6 @@ def google_transcation(source,primary_language='en-US',second_languages=[]):
         print("WaitTimeoutError")
     except sr.UnknownValueError:
         print("Sorry, I could not understand the audio")
-        for language in second_languages:
-            print(language)
-            query = recognizer.recognize_google(audio, language=language)
         query = "on error"
     finally:
         return audio
@@ -92,7 +93,7 @@ def google_transcation(source,primary_language='en-US',second_languages=[]):
 # 使用麦克风作为音频源
 with sr.Microphone(sample_rate=16000) as source:
     # audio = monter_whisper(source)
-    audio = google_transcation(source,"en-US",["zh-CN"])
+    audio = google_transcation(source,["zh-CN"])
 
 
 
@@ -105,8 +106,7 @@ def wav_data_from_stream(audio):
     audio_fp32 = audio_array.astype(np.float32)
     return audio_fp32
 
-# 获取音频数据
-audio_data = audio.get_raw_data()
+
 def whisper_to_E_text(tmpfile="./temp.wav"):
     result = model.transcribe(tmpfile, language="zh", fp16=False, temperature=0.4,initial_prompt='听起来不错')
     text = result['text'].strip()
@@ -114,16 +114,17 @@ def whisper_to_E_text(tmpfile="./temp.wav"):
     return text
 
 # 获取音频文件文本
-def audio_from_wav_file(audio_data):
+def audio_from_wav_file(audio):
     try:
-        wav = sr.AudioData(audio_data, source.SAMPLE_RATE, source.SAMPLE_WIDTH)
-        wav_data = io.BytesIO(wav.get_wav_data())
-        with open("temp.wav", 'w+b') as f:
-            f.write(wav_data.read())
-        print("save as")
-        whisper_to_E_text("temp.wav")
+        if(audio):
+            audio_data = audio.get_raw_data()
+            wav = sr.AudioData(audio_data, source.SAMPLE_RATE, source.SAMPLE_WIDTH)
+            wav_data = io.BytesIO(wav.get_wav_data())
+            with open("temp.wav", 'w+b') as f:
+                f.write(wav_data.read())
+            print("save as")
+            whisper_to_E_text("temp.wav")
     except Exception as e:
         print(f"An error occurred: {e}")
-
 
 # audio_from_wav_file(audio_data)

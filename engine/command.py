@@ -63,7 +63,7 @@ def takecommand():
         print('recognizing')
         eel.DisplayMessage('recognizing...')
         # Recognize (convert from speech to text)
-        query = r.recognize_google(audio, language='en-in')
+        query = r.recognize_google(audio, language='zh-CN')
         if query:
             print(f"You said: {query}")
         else:
@@ -95,21 +95,21 @@ def allCommands():
 
     query = takecommand()
 
-    if "open" in query:
+    if "open" in query or "打开" in query:
         print("open a local app")
         from engine.features import openCommand
         openCommand(query)
-    elif "on youtube" in query:
+    elif "on youtube" in query or '在youtube' in query:
          print("on youtube website")
          from engine.features import PlayYoutube
          PlayYoutube(query)
-    elif "video" in query:
+    elif "video" in query or '视频' in query:
         print("play a firework video")
         video_dir = "www\\assets\\video\\firework.mp4"
         # from engine.features import PlayFirework
         # PlayFirework(video_dir)
         eel.PlayVideo(video_dir)
-    elif "weather" in query:
+    elif "weather" in query  or '天气' in query:
         from engine.features import GetWeather
         GetWeather(query)
     #未能识别的命令
