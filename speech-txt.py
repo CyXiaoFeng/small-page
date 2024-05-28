@@ -61,7 +61,82 @@ def monter_whisper(source):
 def wav_fp32_from_raw_data(audio_array):
     wav_data = audio_array.flatten().astype(np.float32) / 32768.0
     return wav_data
+def getLocationCodeByQuery(query):
+    cityCode = {'成都': 'S1003',
+    '北京': '54511',
+    '南京': '58238',
+    '南宁': '59431',
+    '南昌': '58606',
+    '合肥': '58321',
+    '哈尔滨': '50953',
+    '广州': '59287',
+    '徐家汇': '58367',
+    '拉萨': '55591',
+    '昆明': '56778',
+    '杭州': '58457',
+    '武汉': '57494',
+    '沈阳': '54342',
+    '沙坪坝': '57516',
+    '济南': '54823',
+    '海口': '59758',
+    '深圳': '59493',
+    '石家庄': '53698-sjz',
+    '福州': '58847',
+    '萝岗': '59287-lg',
+    '西宁': '52866',
+    '西安': 'V8870',
+    '贵阳': '57816',
+    '郑州': '57083',
+    '银川': '53614',
+    '长春': '54161',
+    '长沙黄花': '57679',
+    '鹿泉': '53698',
+    '乌鲁木齐': '51463',
+    '兰州': '52889',
+    '黑牛城': '54517',
+    '香港天文台': '45005',
+    '大潭山': '45011',
+    '台北': '58968',
+    'chengdu': 'S1003',
+    'beijing': '54511',
+    'nanjing': '58238',
+    'nanning': '59431',
+    'nanchang': '58606',
+    'hefei': '58321',
+    'haerbin': '50953',
+    'guangzhou': '59287',
+    'xujiahui': '58367',
+    'lasa': '55591',
+    'kunming': '56778',
+    'hangzhou': '58457',
+    'wuhan': '57494',
+    'shenyang': '54342',
+    'shapingba': '57516',
+    'jinan': '54823',
+    'haikou': '59758',
+    'shenzhen': '59493',
+    'shijiazhuang': '53698-sjz',
+    'fuzhou': '58847',
+    'luogang': '59287-lg',
+    'xining': '52866',
+    'xian': 'V8870',
+    'guiyang': '57816',
+    'zhengzhou': '57083',
+    'yinchuan': '53614',
+    'changchun': '54161',
+    'changshahuanghua': '57679',
+    'luquan': '53698',
+    'wulumuqi': '51463',
+    'lanzhou': '52889',
+    'heiniucheng': '54517',
+    'xianggangtianwentai': '45005',
+    'datanshan': '45011',
+    'taibei': '58968'}
+    for key,value in cityCode.items():
+        if key in query:
+            return value
 
+    return '54511'
 # 谷歌语音转换
 def google_transcation(source,second_languages=[]):
     audio = None
@@ -74,9 +149,11 @@ def google_transcation(source,second_languages=[]):
         for language in second_languages:
             print(language)
             query = recognizer.recognize_google(audio, language=language)
-            print(f"{'on youtube' in query.lower() or '在youtube' in query.lower()}")
+            print(f"{'weather' in query.lower() or '天气' in query.lower()}")
+            
         if query:
             print(f"You said: {query}")
+            print(f"区域:{getLocationCodeByQuery(query)}")
         else:
             print("Sorry, I could not understand the audio")
             query = "on error"
