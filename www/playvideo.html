@@ -13,13 +13,8 @@
     
         <!-- Bootsrap Icons -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-        <script src="/eel.js"></script>
-       
         |<!-- Texllate-->
         <link rel="stylesheet" href="assets/vendore/texllate/animate.css">
-    
-        
-    
         <link rel="stylesheet" href="style.css">
         <style>
             body {
@@ -39,11 +34,30 @@
         </style>
     </head>
     <body>
-        <video width="600" controls autoplay>
+        <button id="bck" onclick="backIndex()">返回</button>
+        <video id="vdo" width="600" controls autoplay>
             <source src="assets/video/firework.mp4" type="video/mp4">
             Your browser does not support the video tag.
         </video>
-        
+        <!--Jquery  -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <!--particle js-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+
+    <!-- Texllate js -->
+    <script src="assets/vendore/texllate/jquery.fittext.js"></script>
+    <script src="assets/vendore/texllate/jquery.lettering.js"></script>
+    <script src="http://jschr.github.io/textillate/jquery.textillate.js"></script>
+
+    <script src="video.js"></script>
+    <script src="/eel.js"></script>
     </body>
 
 </html>

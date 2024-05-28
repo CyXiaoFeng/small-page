@@ -118,3 +118,8 @@ def allCommands():
         speak('not correct command')
 
     eel.ShowHood()
+
+@eel.expose
+def playVideo():
+    video_dir = "www\\assets\\video\\firework.mp4"
+    return video_dir
