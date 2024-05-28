@@ -17,7 +17,7 @@ def speak(text):
     engine.runAndWait()
 
 
-def takecommand():
+def takecommandByWhisper():
     try:
         r = sr.Recognizer()
         with sr.Microphone() as source:
@@ -51,7 +51,7 @@ def takecommand():
         print(f"Could not request results; {e}")
     return "error"
 
-def takecommands():
+def takecommand():
     try:
         r = sr.Recognizer()
         with sr.Microphone() as source:
