@@ -22,4 +22,15 @@ $(document).ready(function () {
 
     }
     
+    eel.expose(ImageToWord)
+    function ImageToWord() {
+        window.location.replace("image2txt.html");
+
+    }
+    eel.expose(monitorSpeech)
+    function monitorSpeech() {
+        window.location.replace("monivoice.html");
+
+    }
+    
 });

@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $("#MicBtn").click(function () {
+    $("#bck").click(function () {
         window.location.replace("index.html")
     });
     eel.playVideo();

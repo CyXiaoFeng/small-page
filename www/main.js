@@ -31,4 +31,6 @@ $(document).ready(function () {
     eel.allCommands()()    //调用此函数
   });
 
+  eel.initIndex();
+
 });
