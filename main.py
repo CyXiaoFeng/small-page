@@ -12,7 +12,7 @@ eel.spawn(oth_thread)
 def start():
     eel.init("www")
     os.system('start msedge.exe --app="http://localhost:8000/index.html"')
-    eel.start('index.html',mode='None',host='localhost',block=True)
+    eel.start('index.html',mode=None,host='localhost',block=True)
 
 if __name__ == '__main__':
      p1 = multiprocessing.Process(target=start)
