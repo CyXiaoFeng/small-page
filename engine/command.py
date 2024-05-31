@@ -140,14 +140,17 @@ def allCommands():
         video_dir = "www\\assets\\video\\firework.mp4"
         # from engine.features import PlayFirework
         # PlayFirework(video_dir)
-        eel.PlayVideo(video_dir)
+        eel.stepToURL("playvideo.html")
     elif "weather" in query  or '天气' in query:
         from engine.features import GetWeather
         GetWeather(query)
     elif "to word" in query  or '文字' in query:
-        eel.ImageToWord()
+        print("文字识别")
+        eel.stepToURL("image2txt.html")
     elif "to voice" in query  or '语音' in query:
-        eel.monitorSpeech()
+        print("语音识别")
+        eel.stepToURL("monivoice.html")
+        # eel.show("monivoice.html")
     #未能识别的命令
     else:
         print("not correct command")

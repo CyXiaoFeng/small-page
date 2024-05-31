@@ -32,5 +32,22 @@ $(document).ready(function () {
         window.location.replace("monivoice.html");
 
     }
+
+    eel.expose(PlayVideo)
+    function PlayVideo(videoPath) {
+        window.location.replace("playvideo.html");
+
+    }
+    
+    eel.expose(ImageToWord)
+    function ImageToWord() {
+        window.location.replace("image2txt.html");
+
+    }
+    eel.expose(stepToURL)
+    function stepToURL(urlAdd) {
+        window.location.replace(urlAdd);
+
+    }
     
 });
