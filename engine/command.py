@@ -179,6 +179,8 @@ def recognize_text(data_url):
 
 @eel.expose
 def startlistenAudio2Word():
+    global is_listening
+    is_listening = True
     listening_thread = threading.Thread(target=listen_thread)
     listening_thread.start()
 
