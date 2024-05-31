@@ -40,11 +40,13 @@ def wav_fp32_from_raw_data(audio_array):
 
 stop_listening = None
 is_listening = True
+tips = "请说话......"
 # 定义回调函数
 def callback(recognizer, audio):
+    global tips
     try:
-        print("请说话...")
-        eel.updateStatus("请说话...")
+        print(tips)
+        eel.updateStatus(tips)
         silent, audio_array = is_silent(audio)
         if silent:
             print("声音太小，听不清！")
@@ -57,8 +59,9 @@ def callback(recognizer, audio):
             print(f"你说的是：{result['text']}")
             eel.displayWord(result['text'])
             eel.updateStatus("")
-        print("请继续说话！")
-        eel.updateStatus("请说话...")
+        tips = "请继续说话！"
+        print(tips)
+        eel.updateStatus(tips)
     except Exception as e:
         print(e)
 
@@ -68,7 +71,7 @@ def listen_thread():
     with sr.Microphone(sample_rate=16000) as microphone:
         r.adjust_for_ambient_noise(microphone,duration=1)
         print("正在监听，请说话......")
-    stop_listening =r.listen_in_background(microphone,callback,6)
+    stop_listening =r.listen_in_background(microphone,callback)
     try:
         while is_listening:
             # print("任务运行中。。。。。。")
