@@ -94,40 +94,41 @@ def monter_whisper():
                 if stop_event.is_set():
                     break
 
-def monter_whisper_async():
-    recognizer = sr.Recognizer()
+stop_listening = None
+is_listening = True
+# 定义回调函数
+def callback(recognizer, audio):
+    try:
+        print("请说话...")
+        silent, audio_array = is_silent(audio)
+        if silent:
+            print("声音太小，听不清！")
+            eel.displayWord("声音太小，听不清！")
+        else:
+            eel.displayWord("正在识别......")
+            wav_data = wav_fp32_from_raw_data(audio_array)
+            result = model.transcribe(wav_data, language="zh", fp16=False, initial_prompt='听起来不错')
+            print(f"你说的是：{result['text']}")
+            eel.displayWord(result['text'])
+        print("请继续说话！")
+    except Exception as e:
+        print(e)
 
-    # 创建麦克风源
-    microphone = sr.Microphone(sample_rate=16000)
-
-    # 定义回调函数
-    def callback(recognizer, audio):
-        try:
-            print("请说话...")
-            silent, audio_array = is_silent(audio)
-            print(f"静音了吗？{silent}")
-            if silent:
-                print("声音太小，听不清！")
-                eel.displayWord("声音太小，听不清！")
-                time.sleep(1)
-            else:
-                wav_data = wav_fp32_from_raw_data(audio_array)
-                result = model.transcribe(wav_data, language="zh", fp16=False, initial_prompt='听起来不错')
-                print(f"你说的是：{result['text']}")
-                eel.displayWord(result['text'])
-        except sr.WaitTimeoutError:
-            print("监听超时")
-        except KeyboardInterrupt:
-            print("程序结束")
-
-    # 开始在后台监听音频
-    stop_listening = recognizer.listen_in_background(microphone, callback)
-
-    # 主线程继续执行其他操作
-    print("主线程继续执行")
-
-    # 如果需要停止监听，调用返回的函数
-    # stop_listening(wait_for_stop=False)
+def listen_thread():
+    global stop_listening
+    r = sr.Recognizer()
+    with sr.Microphone(sample_rate=16000) as microphone:
+        r.adjust_for_ambient_noise(microphone,duration=1)
+        print("正在监听，请说话......")
+    stop_listening =r.listen_in_background(microphone,callback,6)
+    try:
+        while is_listening:
+            # print("任务运行中。。。。。。")
+            time.sleep(1)
+            pass
+    except KeyboardInterrupt:
+            stop_listening(wait_for_stop=False)
+    print("监听已停止")
 
 def takecommand():
     try:
@@ -225,29 +226,17 @@ def recognize_text(data_url):
     return text
 
 @eel.expose
-def listenAudio2Word():
-    monter_whisper_async()
-    # global thread
-    # print(f"启动线程。{thread==None}")
-    # if(thread != None):
-    #     return
-    # # 确保停止事件被清除
-    # stop_event.clear()
-    # # 启动新的线程并传递参数
-    # thread = threading.Thread(target=monter_whisper_async)
-    # thread.start()
-
+def startlistenAudio2Word():
+    listening_thread = threading.Thread(target=listen_thread)
+    listening_thread.start()
 
 @eel.expose
 def stoplistenAudio2Word():
-    print("停止线程")
-    global thread
-    # 设置停止事件
-    stop_event.set()
-    # 等待线程结束
-    if thread:
-        thread.join()
-    print("线程已停止。")
+    global stop_listening, is_listening
+    if(stop_listening):
+        stop_listening(wait_for_stop=False)
+        print("已停止监听....")
+    is_listening = False
     return "success"
 
 @eel.expose
