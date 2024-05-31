@@ -30,70 +30,13 @@ def speak(text):
 def is_silent(audio_data,threshold=1000):
     audio_array = np.frombuffer(audio_data.get_raw_data(),np.int16)
     amplitude = np.abs(audio_array).mean()
-    print(f"音频振幅{amplitude}")
+    # print(f"音频振幅{amplitude}")
     return amplitude<threshold, audio_array
 
 # 转换raw_data数据为wav fp32数据
 def wav_fp32_from_raw_data(audio_array):
     wav_data = audio_array.flatten().astype(np.float32) / 32768.0
     return wav_data
-
-# 全局变量
-stop_event = threading.Event()
-thread = None
-
-def callback(recognizer, audio):
-        try:
-            silent, audio_array = is_silent(audio)
-            print(f"静音了吗？{silent}")
-            if silent:
-                print("声音太小，听不清！")
-                eel.displayWord("声音太小，听不清！")
-                time.sleep(1)
-            else:
-                wav_data = wav_fp32_from_raw_data(audio_array)
-                result = model.transcribe(wav_data, language="zh", fp16=False, initial_prompt='听起来不错')
-                print(f"你说的是：{result['text']}")
-                eel.displayWord(result['text'])
-        except sr.WaitTimeoutError:
-            print("监听超时")
-        except KeyboardInterrupt:
-            print("程序结束")
-
-# 通过whisper做转换
-def monter_whisper():
-    with sr.Microphone(sample_rate=16000) as source:
-        recognizer = sr.Recognizer()
-    # 调整麦克风噪声水平
-        while not stop_event.is_set():
-            recognizer.adjust_for_ambient_noise(source)
-            recognizer.pause_threshold = 1
-            print("请说话...")
-            eel.updateStatus("请说话...")
-            # 捕获音频
-            try:
-                audio = recognizer.listen(source,10,6)
-                silent, audio_array=is_silent(audio)
-                print(f"静音了吗？{silent}")
-                if(silent):
-                    print("声音太小，听不清！")
-                    eel.displayWord("声音太小，听不清！")
-                    time.sleep(1)
-                else:
-                    wav_data = wav_fp32_from_raw_data(audio_array)
-                    result = model.transcribe(wav_data,language="zh",fp16=False,initial_prompt='听起来不错')
-                    print(f"你说的是：{result['text']}")
-                    eel.displayWord(result['text'])
-            except sr.WaitTimeoutError:
-                print("监听超时")
-            except KeyboardInterrupt:
-                print("程序结束")
-                break
-            finally:
-                # 添加检查点，以便在循环执行期间检查stop_event
-                print("检查状态")
-                if stop_event.is_set():
-                    break
 
 stop_listening = None
 is_listening = True
@@ -108,12 +51,14 @@ def callback(recognizer, audio):
             eel.displayWord("声音太小，听不清！")
         else:
             eel.updateStatus("识别中...")
+            print("识别中...")
             wav_data = wav_fp32_from_raw_data(audio_array)
             result = model.transcribe(wav_data, language="zh", fp16=False, initial_prompt='听起来不错')
             print(f"你说的是：{result['text']}")
             eel.displayWord(result['text'])
             eel.updateStatus("")
         print("请继续说话！")
+        eel.updateStatus("请说话...")
     except Exception as e:
         print(e)
 
@@ -170,9 +115,10 @@ def takecommand():
     # return "open 有道词典"
     # return "weather in beijing"
     # return "play video"
-    # return query.lower()
-    return "语音"
+    #  return "语音"
     # return "文字"
+    return query.lower()
+   
 @eel.expose
 def allCommands():
 
