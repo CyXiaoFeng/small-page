@@ -69,6 +69,7 @@ def monter_whisper():
             recognizer.adjust_for_ambient_noise(source)
             recognizer.pause_threshold = 1
             print("请说话...")
+            eel.updateStatus("请说话...")
             # 捕获音频
             try:
                 audio = recognizer.listen(source,10,6)
@@ -100,16 +101,18 @@ is_listening = True
 def callback(recognizer, audio):
     try:
         print("请说话...")
+        eel.updateStatus("请说话...")
         silent, audio_array = is_silent(audio)
         if silent:
             print("声音太小，听不清！")
             eel.displayWord("声音太小，听不清！")
         else:
-            eel.displayWord("正在识别......")
+            eel.updateStatus("识别中...")
             wav_data = wav_fp32_from_raw_data(audio_array)
             result = model.transcribe(wav_data, language="zh", fp16=False, initial_prompt='听起来不错')
             print(f"你说的是：{result['text']}")
             eel.displayWord(result['text'])
+            eel.updateStatus("")
         print("请继续说话！")
     except Exception as e:
         print(e)
