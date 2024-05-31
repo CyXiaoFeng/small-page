@@ -43,25 +43,25 @@ is_listening = True
 tips = "请说话......"
 # 定义回调函数
 def callback(recognizer, audio):
-    global tips
+    global tips,is_listening
     try:
         print(tips)
-        eel.updateStatus(tips)
+        eel.updateStatus(f"{tips if is_listening else '状态'}")
         silent, audio_array = is_silent(audio)
         if silent:
             print("声音太小，听不清！")
             eel.displayWord("声音太小，听不清！")
         else:
-            eel.updateStatus("识别中...")
             print("识别中...")
+            eel.updateStatus(f"{'识别中...' if is_listening else '状态'}")
             wav_data = wav_fp32_from_raw_data(audio_array)
             result = model.transcribe(wav_data, language="zh", fp16=False, initial_prompt='听起来不错')
             print(f"你说的是：{result['text']}")
             eel.displayWord(result['text'])
-            eel.updateStatus("")
+            eel.updateStatus(f"{'识别成功' if is_listening else '状态'}")
         tips = "请继续说话！"
         print(tips)
-        eel.updateStatus(tips)
+        eel.updateStatus(f"{tips if is_listening else '状态'}")
     except Exception as e:
         print(e)
 
@@ -185,10 +185,10 @@ def startlistenAudio2Word():
 @eel.expose
 def stoplistenAudio2Word():
     global stop_listening, is_listening
+    is_listening = False
     if(stop_listening):
         stop_listening(wait_for_stop=False)
         print("已停止监听....")
-    is_listening = False
     return "success"
 
 @eel.expose
