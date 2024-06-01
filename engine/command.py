@@ -118,7 +118,7 @@ def takecommand():
     # return "open 有道词典"
     # return "weather in beijing"
     # return "play video"
-    #  return "语音"
+    # return "语音"
     # return "文字"
     return query.lower()
    
